@@ -1,8 +1,8 @@
 def registerAction(event)
   user = User.where({user_id: event["source"]["userId"]}).first
   # 15件までを表示
-  participants = Participant.where({user_id: user.id }).shuffle[0...15]
-  events = participants.map{|part| part.event }
+  participants = Participant.where({user_id: user.id })
+  events = participants.map{|part| part.event }.reverse[0...5]
   all = participants.length
   p events.length
   if events.length == 0
@@ -33,10 +33,10 @@ def registerAction(event)
     n1.pushUri('登録一覧ページへ', {"uri": "https://trunk-hackers-a4geru.c9users.io/user/#{user.id}"})#[TODO] 自分の登録している一覧へ
     client.reply_message(event['replyToken'], [
         m.reply(list), # 結果リスト
-        n.reply([n1.getButtons('検索結果', "#{all}件のデータが登録されています。\n詳しくはwebでの閲覧が可能です。")])
+        n.reply([n1.getButtons('検索結果', "#{participants.length}件のデータが登録されています。\n詳しくはwebでの閲覧が可能です。")])
       ])
   else
-    # p events
+    p "hogehoge >> #{participants.length}"
     events = events[0...events.length-(events.length % 5)]
     cnt = 0
     list = []
@@ -52,12 +52,13 @@ def registerAction(event)
       end
       list << m1.getButtons(title, text)
     end
+    p user
     n = MessageCarousel.new('webへのリンク')
     n1 = MessageButton.new('hoge')
     n1.pushUri('登録一覧ページへ', {"uri": "https://trunk-hackers-a4geru.c9users.io/user/#{user.id}"})#[TODO] 自分の登録している一覧へ
     client.reply_message(event['replyToken'], [
         m.reply(list), # 結果リスト
-        n.reply([n1.getButtons('検索結果', "#{all}件のデータが登録されています。\n詳しくはwebでの閲覧が可能です。")])
+        n.reply([n1.getButtons('検索結果', "最新5件が表示されています。\n#{participants.length}件のデータが登録されています。\n詳しくはwebでの閲覧が可能です。")])
       ])
   end
 end
