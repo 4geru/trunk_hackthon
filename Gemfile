@@ -8,6 +8,7 @@ gem 'line-bot-api'
 # test
 gem "rspec", ">= 3.0.0"
 gem 'dotenv'
+gem 'cloudinary'
 
 # db
 gem "activerecord", "< 5.0.0"

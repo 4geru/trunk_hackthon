@@ -5,7 +5,7 @@
 	<title>タイトル</title>
 </head>
 <body>
-<form method="post" action="/event/edit" enctype='multipart/form-data'>
+<form method="post" action="/event/<%= @event.id %>/edit" enctype='multipart/form-data'>
     <table>
     	<tr>
     		<th>name</th>

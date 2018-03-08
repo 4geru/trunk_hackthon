@@ -19,7 +19,8 @@ end
 get '/' do
     if session[:user].nil?
         if params[:word].present?
-            @events = Event.where("event_name like ?", "%#{params[:word]}%")
+            words = params[:word].split(' ')
+            @events = words.map{|w| Event.where("event_name like ?", "%#{w}%")}.flatten
         else
             @events = Event.all
         end
@@ -108,7 +109,12 @@ end
 
 # イベント関係
 get '/event' do
-   @events = Event.all
+    if params[:word].present?
+        words = params[:word].split(' ')
+        @events = words.map{|w| Event.where("event_name like ?", "%#{w}%")}.flatten
+    else
+        @events = Event.all
+    end 
    erb :event
 end
 
@@ -143,7 +149,17 @@ end
 
 post '/event/:id/edit' do
     @event = Event.find(params[:id])
+    @event.update({
+        event_name: params[:name] || @event.event_name,
+        user_id: session[:user] || @event.user_id,
+        detail: params[:detail] || @event.detail,
+        start_time: params[:start_time] || @event.start_time,
+        end_time: params[:end_time] || @event.end_time,
+    })
     @event.save
+    if params[:file]
+        image_upload(params[:file], params[:id])
+    end
     redirect "/event/#{params[:id]}"
 end
 
