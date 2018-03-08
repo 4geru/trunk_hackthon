@@ -1,28 +1,17 @@
 body{
     /*font-family: "Kokoro";*/
     font-family: "TsukuARdGothicStd-B";
-    margin: 0;
-    text-decoration: none;
     webkit-text-size-adjust: 100%;
+    margin: 0;
 }
 
-a {
-text-decoration: none;
-}
-
-/* header */
-header{
-    height: 220px;
+/* header index */
+.header-index{
+    height: 250px;
     width: 100%;
     background-image: url(wysiwyg_71e591219408a729b2e0.jpg);
-    background-size:100%;
     border-bottom: 4px solid #000;
-}
-
-.before_login {
-    padding: 10px;
-  display: flex;
-  justify-content: space-between;
+    margin-bottom: 25px;
 }
 
 .logo{
@@ -31,13 +20,10 @@ header{
     background: #fff;
 }
 
-.login {
-  height: 33px;
-  width: 115px;
-  margin-right:  -1.5px;
-  background-image: url(./btn_login_base.png);
-  background-size: contain;
-  background-repeat: no-repeat;
+.login{
+    height: 40px;
+    width: 100px;
+    background-color: #fff;
 }
 
 h1{
@@ -54,40 +40,47 @@ h1{
     border-radius: 10px;
     text-align: center;
     margin: 0 auto;
-    padding-top: 15px;
+    padding-top: 2px;
     color: #fff;
+}
+
+/* header other */
+.title{
+    width: 100%;
+    height: 35px;
+    padding-top: 10px;
+    color: #fff;
+    background-color: #e72d2f;
+    margin-bottom: 20px;
 }
 
 /* main */
 .container{
     width: 100%;
-    margin-top: 25px;
     text-align: center;
 }
 
 .main{
     width: 100%;
-}
-
-.form {
-  padding-top: 2px;
+    z-index: 1;
 }
 
 .search{
     width: 100%;
-    border-bottom: 4px solid #e9eaea;
+    border-bottom: 3px solid #e9eaea;
     padding-bottom: 18px;
 }
 
-.submit {
-  height: 28px;
-  width: 30px;
-  border: 0px;
-  border-radius: 10px;
-  padding: 14px 14px 10px 10px;
-  background: url(./meganee.png);
-  background-size: contain;
-  background-repeat: no-repeat;
+.search.mypage{
+    width: 100%;
+    border-bottom: 3px solid #e9eaea;
+    margin-top: 40px;
+    padding-bottom: 18px;
+}
+
+.plan{
+    width: 100%;
+    border-bottom: 3px solid #e9eaea;
 }
 
 h2{
@@ -95,15 +88,26 @@ h2{
 }
 
 input{
-    width: 220px;
-    height: 45px;
+    width: 250px;
+    height: 40px;
     border-radius: 10px;
     margin: 0 auto;
     background-color: #f1f1f1;
     border: none;
     padding-left: 20px;
-    font-size: 15px;
-    font-family: "TsukuARdGothicStd-B";
+    font-size: 14px;
+}
+
+textarea{
+    width: 250px;
+    height: 80px;
+    border-radius: 10px;
+    margin: 0 auto;
+    background-color: #f1f1f1;
+    border: none;
+    padding-left: 20px;
+    padding-top: 10px;
+    font-size: 14px;
 }
 
 /* contents */
@@ -111,16 +115,14 @@ input{
     display: flex;
     align-items: flex-start;
     padding-top: 15px;
-    width: 87%;
+    width: 95%;
     height: 100px;
     margin: 0 auto;
-    color:#000;
     border-bottom: 1px solid #474342;
 }
 
-article img {
-    width: 90px;
-    height: 90px;
+.contents:last-child{
+    border: none;
 }
 
 .date{
@@ -131,35 +133,24 @@ article img {
     margin-top: 25px;
     padding-top: 3px;
     color: #fff;
-    line-height: 0;
-    font-size: 14px;
 }
 
 .month{
     line-height: 0;
-    margin-top: 8px;
-    -webkit-transform:scale(0.5);
-    -moz-transform:scale(0.5);
-    -ms-transform:scale(0.5);
-    -o-transform:scale(0.5);
-    transform:scale(0.5);
+    font-size: 7px;
+    -webkit-transform: scale(0.6);
 }
 
 .border{
     width: 18px;
     margin: 0 auto;
-    margin-top: -8px;
     border-bottom: 1px solid #fff;
 }
 
 .day{
-  margin-top: 6px;
-  line-height: 0;
-  -webkit-transform:scale(0.5);
-  -moz-transform:scale(0.5);
-  -ms-transform:scale(0.5);
-  -o-transform:scale(0.5);
-  transform:scale(0.5);
+    line-height: 0;
+    font-size: 7px;
+    -webkit-transform: scale(0.6);
 }
 
 .contents-thumbnail{
@@ -169,7 +160,6 @@ article img {
 .contents-headline{
     text-align: left;
     height: 80px;
-    width: 220px;
     margin-left: 10px;
 }
 
@@ -184,4 +174,43 @@ h3{
     font-size: 8px;
     line-height: 0em;
     word-wrap: break-word;
+}
+
+/* detail */
+.details-thumbnail{
+    height: 250px;
+}
+
+.detail-main{
+    background-color: #ccc;
+    width: 100%;
+    height: 500px;
+    z-index: 100;
+}
+
+/* event create */
+.form-title{
+    line-height: 0;
+    padding-bottom: px;
+    margin: 12px 10px;
+}
+
+.icon{
+    width: 25px;
+}
+
+.form-con{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.hold{
+    margin-top: 25px;
+}
+
+.create{
+    margin-top: 30px;
 }

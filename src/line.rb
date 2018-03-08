@@ -4,6 +4,7 @@ require './src/class/messageconfirm'
 require './src/event/postback'
 require './src/line/search'
 require './src/line/register'
+require './src/lib/stamps'
 
 def client
   @client ||= Line::Bot::Client.new { |config|

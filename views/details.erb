@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../details.css">
+    <!--<link href="https://fonts.googleapis.com/earlyaccess/kokoro.css" rel="stylesheet" />-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script type="text/javascript" src="//webfont.fontplus.jp/accessor/script/fontplus.js?a5JzW-hQzyA%3D&aa=1&ab=1&ab=1" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header-index">
+        <div class="before_login">
+        <div class="logo">ロゴ
+            <img src="" alt="">
+        </div>
+        <a href="" class="login"><img src="" alt=""></a>
+        </div>
+    </header>
+    <div class="container">
+        <section class="main details">
+            <div class="details-thumbnail">
+            </div>
+            <div class="details-main-headline">
+                <%= @event.event_name %>
+            </div>
+            <div class="details-main-text">
+                <div class="detail-con">
+                <img class="detail-icon" src="../schedule.png" alt="">
+                <h2 class="detail-title"><%= @event.start_time %></h2>
+                </div>
+                <div class="detail-con">
+                <img class="detail-icon" src="../place.png" alt="">
+                <h2 class="detail-title"><%= @event.address %></h2>
+                </div>
+                <div class="detail-con">
+                <img class="detail-icon" src="../detail.png" alt="">
+                <h2 class="detail-text"><%= @event.detail %></h2>
+                </div>
+            </div>
+            <%= session[:user] %>
+            <% if session[:user] %>
+                <% if @event.join(session[:user]) %>
+                <form method="post" action="/event/<%= @event.id %>/join">
+    				<input class="btn details" type="submit" value='参加する'>
+    			</form>
+                <% else %>
+                <form method="post" action="/event/<%= @event.id %>/leave">
+    				<input class="btn details" type="submit" value='キャンセルする'>
+    			</form>
+                <% end %>
+            <% end %>
+        </section>
+    </div>
+    <style>
+        .details-thumbnail{
+            background-image: url(<%= @event.image_url %>);
+            background-size:contain;
+            background-repeat:no-repeat;
+            background-position:center;
+        }
+    </style>
+</body>
+</html>

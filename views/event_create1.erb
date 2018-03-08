@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../event_create.css">
+    <link href="https://fonts.googleapis.com/earlyaccess/kokoro.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+</head>
+<body>
+    <div class="container">
+       <section class="title">ハッカソンを開催する</section>
+        <section class="main hold">
+        <form action="/event/new" method="post"  enctype='multipart/form-data'>
+            <div class="form">
+               <div class="form-con">
+                <h2 class="form-title">タイトル</h2>
+                </div>
+                <input type="text" name="name" value="" placeholder="ここに入力">
+            </div>
+            <div class="form">
+               <div class="form-con">
+                <img class="icon" src="../schedule.png" alt="">
+                <h2 class="form-title">日時</h2>
+                </div>
+                <input type="text" name="start_time" value="" placeholder="ここに入力">
+            </div>
+            <div class="form">
+                <div class="form-con">
+                <img class="icon" src="../place.png" alt="">
+                <h2 class="form-title">場所</h2>
+                </div>
+                <input type="text" name="address" value="" placeholder="ここに入力">
+            </div>
+            <div class="form">
+               <div class="form-con">
+                <img class="icon" src="../detail.png" alt="">
+                <h2 class="form-title">詳細</h2>
+                </div>
+                <textarea name="detail" cols="50" rows="10"placeholder="ここに入力"></textarea>
+            </div>
+            <div class="form">
+               <div class="form-con">
+                <img class="icon" src="../image.png" alt="">
+                <h2 class="form-title">画像</h2>
+                </div>
+                <input type="file" name='file'>
+            </div>
+            <button class="btn create" type="submit">作成</button>
+          </form>
+        </section>
+    </div>
+</body>
+</html>

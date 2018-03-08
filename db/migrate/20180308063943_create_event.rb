@@ -3,6 +3,7 @@ class CreateEvent < ActiveRecord::Migration
     create_table :events do |t|
       t.integer :user_id
       t.string  :event_name
+      t.string :address
       t.string :detail
       t.string :image_url
       t.float   :longitude # 経度

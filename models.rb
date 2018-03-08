@@ -15,6 +15,10 @@ class Event < ActiveRecord::Base
       self.image_url
     end
   end
+  
+  def join(user_id)
+    self.participants.any?{|p| p.user == user_id}
+  end
 end
 
 class Participant < ActiveRecord::Base

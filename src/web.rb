@@ -22,8 +22,9 @@ get '/' do
             words = params[:keyword].split(' ')
             @events = words.map{|w| Event.where("event_name like ?", "%#{w}%")}.flatten
         else
-            @events = Event.all
+            @events = Event.all.reverse
         end
+        @events = @events[0...10]
         erb :index
     else
         redirect "/user/#{session[:user]}"
@@ -104,69 +105,79 @@ end
 get '/user/:id' do
     @user = User.find(params[:id])
     @events = Participant.where(user_id: params[:id]).map{|p| p.event } || []
-    erb :user
+    erb :mypage
 end
 
 # イベント関係
-get '/event' do
-    if params[:word].present?
-        words = params[:word].split(' ')
+post '/search' do
+    p params[:keyword]
+    if params[:keyword].present?
+        words = params[:keyword].split(' ')
         @events = words.map{|w| Event.where("event_name like ?", "%#{w}%")}.flatten
     else
         @events = Event.all
     end 
-   erb :event
+   erb :search
 end
 
 get '/event/new' do
-    erb :event_create
+    erb :event_create1
 end
+
+# 使わんぞ
+# get '/details' do
+#     erb :details
+# end
 
 get '/event/:id' do
     @event = Event.find(params[:id])
-    erb :event_detail
+    erb :details
 end
 
 post '/event/new' do
     @event = Event.create(
         event_name: params[:name],
         user_id: session[:user],
+        address: params[:address],
         detail: params[:detail],
         start_time: params[:start_time],
         end_time: params[:end_time],
     )
     if params[:file]
-        puts params[:file]
-        image_upload(params[:file])
+        
+        image_upload(params[:file], Event.last.id)
     end
     redirect "/event/#{@event.id}"
 end
 
-get '/event/:id/edit' do
-    @event = Event.find(params[:id])
-    erb :event_edit
-end
+# 使わんぞ
+# get '/event/:id/edit' do
+#     @event = Event.find(params[:id])
+#     erb :event_edit
+# end
 
-post '/event/:id/edit' do
-    @event = Event.find(params[:id])
-    @event.update({
-        event_name: params[:name] || @event.event_name,
-        user_id: session[:user] || @event.user_id,
-        detail: params[:detail] || @event.detail,
-        start_time: params[:start_time] || @event.start_time,
-        end_time: params[:end_time] || @event.end_time,
-    })
-    @event.save
-    if params[:file]
-        image_upload(params[:file], params[:id])
-    end
-    redirect "/event/#{params[:id]}"
-end
+# 使わんぞ
+# post '/event/:id/edit' do
+#     @event = Event.find(params[:id])
+#     @event.update({
+#         event_name: params[:name] || @event.event_name,
+#         user_id: session[:user] || @event.user_id,
+#         detail: params[:detail] || @event.detail,
+#         start_time: params[:start_time] || @event.start_time,
+#         end_time: params[:end_time] || @event.end_time,
+#     })
+#     @event.save
+#     if params[:file]
+#         image_upload(params[:file], params[:id])
+#     end
+#     redirect "/event/#{params[:id]}"
+# end
 
-get '/event/:id/delete' do
-    Event.find(params[:id]).destroy
-    redirect '/event'
-end
+# 使わんぞ
+# get '/event/:id/delete' do
+#     Event.find(params[:id]).destroy
+#     redirect '/event'
+# end
 
 post '/event/:id/join' do
     p session[:user]
@@ -175,6 +186,14 @@ post '/event/:id/join' do
         user_id: session[:user],
         event_id: params[:id]
     )
+    redirect "/event/#{params[:id]}"
+end
+
+post '/event/:id/leave' do
+    Participant.find(
+        user_id: session[:user],
+        event_id: params[:id]
+    ).delete
     redirect "/event/#{params[:id]}"
 end
 

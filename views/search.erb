@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../search.css">
+    <!--<link href="https://fonts.googleapis.com/earlyaccess/kokoro.css" rel="stylesheet" />-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script type="text/javascript" src="//webfont.fontplus.jp/accessor/script/fontplus.js?a5JzW-hQzyA%3D&aa=1&ab=1&ab=1" charset="utf-8"></script>
+</head>
+<body>
+  <header class="header-index">
+      <div class="before_login">
+      <div class="logo">ロゴ
+          <img src="" alt="">
+      </div>
+      <a href="" class="login"><img src="" alt=""></a>
+      </div>
+  </header>
+    <div class="container">
+        <section class="title">####の検索結果######件</section>
+        <section class="main">
+            <div class="search">
+            <form action="/search" method="post" class="form">
+              <input type="text" name="keyword" value="" placeholder="キーワード">
+              <button type="submit" class="submit">
+            </form>
+            </div>
+                <% @events.each do |event| %>
+               		<a href="/event/<%= event.id %>">
+    		            <article class="contents">
+    		                <div class="date">
+    		                    <p class="month"><%= event.start_time.to_s.slice(5,2).to_i %>月</p>
+    		                    <p class="border"></p>
+    		                    <p class="day"><%= event.start_time.to_s.slice(8,2).to_i %></p>
+    		                </div>
+    		                <img class="contents-thumbnail" src="<%= event.image_url %>" alt="" >
+    		                <div class="contents-headline">
+    			                <h3><%= event.event_name %></h3>
+    			                <p class="contents-text"><%= event.detail %></p>
+    		                </div>
+    		            </article>
+    	            </a>
+                <% end %>
+        </section>
+    </div>
+</body>
+</html>
