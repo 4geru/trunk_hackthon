@@ -14,7 +14,7 @@ class MessageButton
     "altText": @altText || "this is a buttons template",
     "template": {
         "type": "buttons",
-        "title": "geru" || title,
+        "title": title,
         "text": text,
         "actions": @buttons
     }
