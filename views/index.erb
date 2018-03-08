@@ -1,10 +1,49 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-	<meta charset="UTF-8">
-	<title>タイトル</title>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/earlyaccess/kokoro.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 </head>
 <body>
-<a href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1567041353&redirect_uri=https://trunk-hackers-a4geru.c9users.io/user&state=12345abcde&scope=openid%20profile&nonce=09876xyz"><img src="/btn_login_base.png"></a>
+    <header>
+        <div class="before_login">
+          <div class="logo">ロゴ
+              <img src="" alt="">
+          </div>
+          <div class="login"><a href="/"></a></div>
+        </div>
+          <h1>コンセプトがーーーーー<br>あーーーるーーー</h1>
+          <div class="btn">ハッカソンを開催する</div>
+    </header>
+    <div class="container">
+        <section class="main">
+            <div class="search">
+            <h2>ハッカソンをさがす</h2>
+            <form action="/" method="get" class="form">
+              <input type="text" name="keyword" value="" placeholder="キーワード">
+              <button type="submit" class="submit">
+            </form>
+            </div>
+            <% @events.each do |event| %>
+           		<a href="/event/<%= event.id %>">
+		            <article class="contents">
+		                <div class="date">
+		                    <p class="month"><%= event.start_time.to_s.slice(5,2).to_i %>月</p>
+		                    <p class="border"></p>
+		                    <p class="day"><%= event.start_time.to_s.slice(8,2).to_i %></p>
+		                </div>
+		                <img class="contents-thumbnail" src="<%= event.image_url %>" alt="" >
+		                <div class="contents-headline">
+			                <h3><%= event.event_name %></h3>
+			                <p class="contents-text"><%= event.detail %></p>
+		                </div>
+		            </article>
+	            </a>
+            <% end %>
+        </section>
+    </div>
 </body>
 </html>

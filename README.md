@@ -1,14 +1,15 @@
+## 名前
+??
 
-### testについて
+## ターゲット
+Progate, dotinstallなどを終えて実際に何かを作りたいプログラミング入門者
 
-[環境構築](http://qiita.com/yusabana/items/db44b81bdddf6ed0e9f5)
-[使い方](http://qiita.com/jnchito/items/42193d066bd61c740612)
+## 提供価値
+ハッカソン・もくもく会の様に人が集まって作業を可能な環境を提供する。
 
-### DBについて
+##実現方法
+LINE API x Webを用いた簡単なUI操作によるイベント企画サービスの提案
 
-```
-$ rake db:create_migration NAME=create_DB_NAME_
-$ rake db:migrate
-```
-
-[参照](http://qiita.com/myokkie/items/b6b68b247ec7a110a1c4)
+## 友達追加
+友達 id : @gwb4708m<br />
+<img src="https://qr-official.line.me/M/IPXO1xNqwe.png">

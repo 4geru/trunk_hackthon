@@ -8,6 +8,13 @@ end
 class Event < ActiveRecord::Base
   has_many :participants
   belongs_to :user
+  def photo
+    if self.image_url =~ /cloudinary/
+      self.image_url.split('/').map{|i| i =~ /upload/ ? "upload/w_600" : i}.join('/')
+    else
+      self.image_url
+    end
+  end
 end
 
 class Participant < ActiveRecord::Base

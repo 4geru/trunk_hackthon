@@ -33,9 +33,9 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        if event.message['text'] =~ /探す/ or event.message['text'] == 'data1'
+        if event.message['text'] =~ /探す/ or event.message['text'] == 'イベントを探す'
           searchAction(event)
-        elsif event.message['text'] == 'data2'
+        elsif event.message['text'] == '登録一覧へ'
           registerAction(event)
         else
           message = {

@@ -18,8 +18,8 @@ end
 # トップページ
 get '/' do
     if session[:user].nil?
-        if params[:word].present?
-            words = params[:word].split(' ')
+        if params[:keyword].present?
+            words = params[:keyword].split(' ')
             @events = words.map{|w| Event.where("event_name like ?", "%#{w}%")}.flatten
         else
             @events = Event.all
