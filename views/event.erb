@@ -5,9 +5,6 @@
 	<title>タイトル</title>
 </head>
 <body>
-<p>user name: <%= @user.name %></p>
-<img src="<%= @user.image_url %>">
-
 <table>
 	<tr>
 		<th>name</th>
@@ -16,7 +13,7 @@
 		<th>end_time</th>
 		<th>image_url</th>
 	</tr>
-	<% @participants.each do |event| %>
+	<% @events.each do |event| %>
 		<tr>
 			<td><%= event.event_name %></td>
 			<td><%= event.detail %></td>

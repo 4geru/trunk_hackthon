@@ -2,15 +2,14 @@ def registerAction(event)
   user = User.where({user_id: event["source"]["userId"]}).first
   # 15件までを表示
   participants = Participant.where({user_id: user.id })
+  p participants
   events = participants.map{|part| part.event }.reverse[0...5]
   all = participants.length
-  p events.length
   if events.length == 0
-    p 'get'
     n = MessageCarousel.new('webへのリンク')
     n1 = MessageButton.new('hoge')
     n1.pushButton('新たに登録する', {"message": "data1", "data": "nil"})#[TODO] 自分の登録している一覧へ
-    n1.pushUri('登録一覧ページへ', {"uri": "https://trunk-hackers-a4geru.c9users.io/user/#{user.id}"})#[TODO] 自分の登録している一覧へ
+    n1.pushUri('登録一覧ページへ', {"uri": "https://trunk-hackers-a4geru.c9users.io/user/#{user.id}"})
     client.reply_message(event['replyToken'], [
         n.reply([n1.getButtons('検索結果', "まだイベントの登録がされていません、登録しましょう！")])
       ])
@@ -25,7 +24,13 @@ def registerAction(event)
       m1 = MessageButton.new('hoge', e.image_url)
       title = e.event_name
       text = e.detail
+      m1.pushUri('詳細を見る', {"uri": "https://trunk-hackers-a4geru.c9users.io/event/#{e.id}?openExternalBrowser=1"})
       m1.pushButton(e.event_name, {"data": "type=allEvent&event_id=#{e.id}"}) 
+      if Participant.where({user_id: user.id, event_id: e.id }).empty?
+        m1.pushButton('参加する', {"data": "type=join&event_id=#{e.id}"}) 
+      else
+        m1.pushButton('キャンセルする', {"data": "type=leave&event_id=#{e.id}"}) 
+      end 
       list << m1.getButtons(title, text)
     end
     n = MessageCarousel.new('webへのリンク')
@@ -46,10 +51,13 @@ def registerAction(event)
       m1 = MessageButton.new('hoge', events[cnt].image_url)
       title = events[cnt].event_name
       text = events[cnt].detail
-      for j in 0...events.length/5
-        m1.pushButton(events[cnt].event_name, {"data": "type=allEvent&event_id=#{events[cnt].id}"}) 
-        cnt += 1
-      end
+      m1.pushUri('詳細を見る', {"uri": "https://trunk-hackers-a4geru.c9users.io/event/#{events[cnt].id}"})
+      if Participant.where({user_id: user.id, event_id: events[cnt].id }).empty?
+        m1.pushButton('参加する', {"data": "type=join&event_id=#{events[cnt].id}"}) 
+      else
+        m1.pushButton('キャンセルする', {"data": "type=leave&event_id=#{events[cnt].id}"}) 
+      end 
+      cnt += 1
       list << m1.getButtons(title, text)
     end
     p user

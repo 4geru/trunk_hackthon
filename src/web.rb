@@ -47,7 +47,7 @@ get '/user' do
             @user_name = json["name"]
             @img = json["picture"]
             
-            if User.find_by(user_id: @user_id).nil?
+            if User.find_by(user_id: @user_id).nil? # ユーザーがいないとき
                 @user = User.create(
                     user_id: @user_id,
                     name: @user_name,
@@ -58,11 +58,16 @@ get '/user' do
                 else
                     redirect '/'
                 end
-            else
+            else # ユーザーがいた時
                 @user = User.find_by(user_id: @user_id)
+                if @user.name.nil?
+                    @user.update({
+                        name: @user_name,
+                        image_url: @img
+                    })
+                end
                 session[:user] = @user.id
             end
-            @participants = Participant.find_by(user_id: @user_id)
             redirect "/user/#{session[:user]}"
         else
             redirect '/'
@@ -77,9 +82,13 @@ get '/signout' do
     redirect '/'
 end
 
-#他のユーザーを閲覧する画面
 get '/user/:id' do
     @user = User.find(params[:id])
+    if Participant.find_by(user_id: params[:id]).present?
+        @participants = Participant.find_by(user_id: params[:id])
+    else
+        @participants = []
+    end
     erb :user
 end
 
