@@ -18,68 +18,69 @@ get '/' do
         end
         erb :index
     else
-        redirect '/user'
+        redirect "/user/#{session[:user]}"
     end
 end
 
 # アカウント関係
-# post '/signup' do
-#     @user = User.create(
-#         username: params[:username],
-#         mail: params[:mail],
-#         password: params[:password],
-#         password_confirmation: params[:password_confirmation]
-#     )
-#     if @user.persisted?
-#         session[:user] = @user.id
-#     end
-#     redirect '/'
-# end
+get '/user' do
+    if session[:user].nil?
+        if params[:state] == "12345abcde"
+            uri = URI.parse("https://api.line.me/oauth2/v2.1/token")
+            # form-urlencodedフォーマット
+            body = {
+                grant_type: "authorization_code",
+                code: params[:code],
+                redirect_uri: "https://trunk-hackers-a4geru.c9users.io/user",
+                client_id: "1567041353",
+                client_secret: "e8226db48fdb1bfd15dbed97384701a1",
+                }
+            res = Net::HTTP.post_form(uri, body)
+            parsed_json = JSON.parse(res.body)
+            
+            id_token = parsed_json["id_token"]
+            arr = id_token.split(".")
+            original = Base64.urlsafe_decode64(arr[1]) 
+            json = JSON.parse(original)
+            
+            @user_id = json["sub"]
+            @user_name = json["name"]
+            @img = json["picture"]
+            
+            if User.find_by(user_id: @user_id).nil?
+                @user = User.create(
+                    user_id: @user_id,
+                    name: @user_name,
+                    image_url: @img
+                )
+                if @user.persisted?
+                  session[:user] = @user.id
+                else
+                    redirect '/'
+                end
+            else
+                @user = User.find_by(user_id: @user_id)
+                session[:user] = @user.id
+            end
+            @participants = Participant.find_by(user_id: @user_id)
+            redirect "/user/#{session[:user]}"
+        else
+            redirect '/'
+        end
+    else
+        redirect "/user/#{session[:user]}"
+    end
+end
 
 get '/signout' do
     session[:user] = nil
     redirect '/'
 end
 
-get '/user' do
-    if params[:state] == "12345abcde"
-        uri = URI.parse("https://api.line.me/oauth2/v2.1/token")
-        # form-urlencodedフォーマット
-        body = {
-            grant_type: "authorization_code",
-            code: params[:code],
-            redirect_uri: "https://trunk-hackers-a4geru.c9users.io/user",
-            client_id: "1567041353",
-            client_secret: "e8226db48fdb1bfd15dbed97384701a1",
-            }
-        res = Net::HTTP.post_form(uri, body)
-        parsed_json = JSON.parse(res.body)
-        
-        id_token = parsed_json["id_token"]
-        arr = id_token.split(".")
-        original = Base64.urlsafe_decode64(arr[1]) 
-        json = JSON.parse(original)
-        
-        @user_id = json["sub"]
-        @user_name = json["name"]
-        @img = json["picture"]
-        p User.find_by(user_id: @user_id)
-        
-        if User.find_by(user_id: @user_id).nil?
-            @user = User.create(
-                user_id: @user_id,
-                name: @user_name,
-                image_url: @img
-            )
-            session[:user] = @user.id
-        else
-            @user = User.find_by(user_id: @user_id)
-        end
-        @participants = Participant.find_by(user_id: @user_id)
-        erb :user
-    else
-        redirect '/'
-    end
+#他のユーザーを閲覧する画面
+get '/user/:id' do
+    @user = User.find(params[:id])
+    erb :user
 end
 
 get '/user/:id/edit' do
@@ -90,7 +91,6 @@ end
 post '/user/:id/edit' do
     @user = User.find(params[:id])
     @user.save
-    
     redirect '/user/:id'
 end
 
@@ -125,7 +125,6 @@ end
 post '/event/:id/edit' do
     @event = Event.find(params[:id])
     @event.save
-    
     redirect '/event/:id'
 end
 
@@ -135,11 +134,10 @@ get '/event/:id/delete' do
 end
 
 post '/event/:id/join' do
-    @participants = Participant.create(
+    @participant = Participant.create(
         user_id: session[:user],
         event_id: params[:id]
     )
-    
     redirect '/event/:id'
 end
 
