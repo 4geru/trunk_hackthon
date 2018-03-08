@@ -2,6 +2,9 @@ require './src/class/messagebutton'
 require './src/class/messagecarousel'
 require './src/class/messageconfirm'
 require './src/event/postback'
+require './src/line/search'
+require './src/line/register'
+
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
@@ -30,27 +33,10 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        if event.message['text'] =~ /探す/
-          
-          len = [(Event.all.length / 3).to_i, 5].min
-          events = Event.all.shuffle.take(len * 3)
-          list = []
-          m  = MessageCarousel.new('イベント選択中')
-          
-          cnt = 0
-          for i in 0...len
-            m1 = MessageButton.new('hoge', events[cnt].image_url)
-            title = events[cnt].event_name
-            text = events[cnt].detail
-            m1.pushButton(events[cnt].event_name, {"data": "type=allEvent&event_id=#{events[cnt].id}"}) 
-            cnt += 1
-            m1.pushButton(events[cnt].event_name, {"data": "type=allEvent&event_id=#{events[cnt].id}"}) 
-            cnt += 1
-            m1.pushButton(events[cnt].event_name, {"data": "type=allEvent&event_id=#{events[cnt].id}"}) 
-            cnt += 1
-            list << m1.getButtons(title, text)
-          end
-          client.reply_message(event['replyToken'], m.reply(list))
+        if event.message['text'] =~ /探す/ or event.message['text'] == 'data1'
+          searchAction(event)
+        elsif event.message['text'] == 'data2'
+          registerAction(event)
         else
           message = {
             type: 'text',
@@ -64,6 +50,8 @@ post '/callback' do
         tf.write(response.body)
         
       end
+    when Line::Bot::Event::Follow
+      client.reply_message(event['replyToken'], { type: 'text', text: "友達追加ありがとうございます！こちらのアカウントでは関西で開催されるギークなイベントをご紹介しております。プログラミングに少し興味を持ち始めた方や，これから始めようと思っている方にぜひ参加していただきたいイベントをご紹介するので，ご期待ください。" }) # TODO書く
     when Line::Bot::Event::Postback
       eventPostBack(event)
     end

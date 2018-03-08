@@ -1,37 +1,28 @@
 require 'bundler/setup'
 Bundler.require
 require 'sinatra/reloader' if development?
-require '../models.rb'
+require './models.rb'
 require 'date'
+require 'net/http'
+require 'uri'
+require "base64"
 enable :sessions
 
 # トップページ
 get '/' do
-    if params[:word].present?
-        @events = Event.where("event_name like ?", "%#{params[:word]}%")
+    if session[:user].nil?
+        if params[:word].present?
+            @events = Event.where("event_name like ?", "%#{params[:word]}%")
+        else
+            @events = Event.all
+        end
+        erb :index
     else
-        @events = Event.all
+        redirect '/user'
     end
-    erb :index
 end
 
 # アカウント関係
-# get '/signin' do
-#     erb :sign_in
-# end
-
-# post '/signin' do
-#     user = User.find_by(mail: params[:mail])
-#     if user && user.authenticate(params[:password])
-#         session[:user] = user.id
-#     end
-#     redirect '/'
-# end
-
-# get '/signup' do
-#     erb :sign_up
-# end
-
 # post '/signup' do
 #     @user = User.create(
 #         username: params[:username],
@@ -45,15 +36,50 @@ end
 #     redirect '/'
 # end
 
-# get '/signout' do
-#     session[:user] = nil
-#     redirect '/'
-# end
+get '/signout' do
+    session[:user] = nil
+    redirect '/'
+end
 
-get '/user/:id' do
-    @user = User.find(params[:id])
-    @participants = Participant.find_by(user_id: session[:user])
-    erb :user
+get '/user' do
+    if params[:state] == "12345abcde"
+        uri = URI.parse("https://api.line.me/oauth2/v2.1/token")
+        # form-urlencodedフォーマット
+        body = {
+            grant_type: "authorization_code",
+            code: params[:code],
+            redirect_uri: "https://trunk-hackers-a4geru.c9users.io/user",
+            client_id: "1567041353",
+            client_secret: "e8226db48fdb1bfd15dbed97384701a1",
+            }
+        res = Net::HTTP.post_form(uri, body)
+        parsed_json = JSON.parse(res.body)
+        
+        id_token = parsed_json["id_token"]
+        arr = id_token.split(".")
+        original = Base64.urlsafe_decode64(arr[1]) 
+        json = JSON.parse(original)
+        
+        @user_id = json["sub"]
+        @user_name = json["name"]
+        @img = json["picture"]
+        p User.find_by(user_id: @user_id)
+        
+        if User.find_by(user_id: @user_id).nil?
+            @user = User.create(
+                user_id: @user_id,
+                name: @user_name,
+                image_url: @img
+            )
+            session[:user] = @user.id
+        else
+            @user = User.find_by(user_id: @user_id)
+        end
+        @participants = Participant.find_by(user_id: @user_id)
+        erb :user
+    else
+        redirect '/'
+    end
 end
 
 get '/user/:id/edit' do
@@ -84,8 +110,8 @@ post '/event/new' do
         name: params[:name],
         user_id: session[:user],
         detail: params[:detail],
-        start_date: params[:start_date],
-        end_date: params[:end_date],
+        start_time: params[:start_time],
+        end_time: params[:end_time],
         image_url: params[:image_url]
     )
     redirect '/event/:id'

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>タイトル</title>
+</head>
+<body>
+<table>
+	<tr>
+		<th>name</th>
+		<td><%= @event.event_name %></td>
+	</tr>
+	<tr>
+		<th>detail</th>
+		<td><%= @event.detail %></td>
+	</tr>
+		<tr>
+		<th>start_time</th>
+		<td><%= @event.start_time %></td>
+	</tr>
+		<tr>
+		<th>end_time</th>
+		<td><%= @event.end_time %></td>
+	</tr>
+		<tr>
+		<th>image_url</th>
+		<td><img src="<%= @event.image_url %>"></td>
+	</tr>
+</table>
+</body>
+</html>

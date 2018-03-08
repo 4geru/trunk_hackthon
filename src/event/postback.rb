@@ -9,7 +9,7 @@ def eventPostBack(event)
     m1 = MessageButton.new('hoge', events.image_url)
     title = events.event_name
     text = events.detail
-    m1.pushButton('詳細を見る', {"data": "type=watch&event_id=#{events.id}"})# URIに書き換える
+    m1.pushUri('詳細を見る', {"uri": "https://trunk-hackers-a4geru.c9users.io/event/#{events.id}"})
     m1.pushButton('参加する', {"data": "type=join&event_id=#{events.id}"}) 
     client.reply_message(event['replyToken'], m.reply([ m1.getButtons(title, text)]))
   when "join"
