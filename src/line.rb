@@ -1,6 +1,7 @@
 require './src/class/messagebutton'
 require './src/class/messagecarousel'
 require './src/class/messageconfirm'
+require './src/event/postback'
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
@@ -32,7 +33,7 @@ post '/callback' do
       when Line::Bot::Event::MessageType::Text
         if event.message['text'] =~ /探す/
           
-          len = [(Event.all.length / 3).to_i, 10].min
+          len = [(Event.all.length / 3).to_i, 5].min
           events = Event.all.shuffle.take(len * 3)
           list = []
           m  = MessageCarousel.new('イベント選択中')
@@ -50,7 +51,6 @@ post '/callback' do
             cnt += 1
             list << m1.getButtons(title, text)
           end
-          p m.reply(list)
           client.reply_message(event['replyToken'], m.reply(list))
         else
           message = {
@@ -63,7 +63,10 @@ post '/callback' do
         response = client.get_message_content(event.message['id'])
         tf = Tempfile.open("content")
         tf.write(response.body)
+        
       end
+    when Line::Bot::Event::Postback
+      eventPostBack(event)
     end
   }
 
