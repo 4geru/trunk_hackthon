@@ -1,6 +1,6 @@
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL']||"sqlite3:db/development.db")
 class User < ActiveRecord::Base
-  validates :channel_id, uniqueness: true
+  validates :user_id, uniqueness: true
   has_many :participants
 end
 
