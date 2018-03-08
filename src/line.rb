@@ -1,3 +1,6 @@
+require './src/class/messagebutton'
+require './src/class/messagecarousel'
+require './src/class/messageconfirm'
 def client
   @client ||= Line::Bot::Client.new { |config|
     config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
@@ -23,17 +26,39 @@ post '/callback' do
     end
     # user = User.find_or_create_by({channel_id: event["source"]["userId"]})
     
-    
     case event
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        msg = Hello.new.message(event.message['text'])
-        message = {
-          type: 'text',
-          text: msg
-        }
-        client.reply_message(event['replyToken'], message)
+        if event.message['text'] =~ /探す/
+          
+          len = [(Event.all.length / 3).to_i, 10].min
+          events = Event.all.shuffle.take(len * 3)
+          list = []
+          m  = MessageCarousel.new('イベント選択中')
+          
+          cnt = 0
+          for i in 0...len
+            m1 = MessageButton.new('hoge', events[cnt].image_url)
+            title = events[cnt].event_name
+            text = events[cnt].detail
+            m1.pushButton(events[cnt].event_name, {"data": "type=allEvent&event_id=#{events[cnt].id}"}) 
+            cnt += 1
+            m1.pushButton(events[cnt].event_name, {"data": "type=allEvent&event_id=#{events[cnt].id}"}) 
+            cnt += 1
+            m1.pushButton(events[cnt].event_name, {"data": "type=allEvent&event_id=#{events[cnt].id}"}) 
+            cnt += 1
+            list << m1.getButtons(title, text)
+          end
+          p m.reply(list)
+          client.reply_message(event['replyToken'], m.reply(list))
+        else
+          message = {
+            type: 'text',
+            text: event.message['text']
+          }
+          client.reply_message(event['replyToken'], message)
+        end
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
         tf = Tempfile.open("content")
