@@ -7,14 +7,16 @@ gem 'rake'
 gem 'line-bot-api'
 # test
 gem "rspec", ">= 3.0.0"
+gem 'dotenv'
 
 # db
 gem "activerecord", "< 5.0.0"
-gem "sinatra-activerecord"
+gem 'sinatra-activerecord'
+
 group :development do
   gem 'sqlite3'
 end
 
-group :production do
+# group :production do
   gem 'pg'
-end
+# end
