@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require './src/image_uploader'
 Bundler.require
 require 'sinatra/reloader' if development?
 require './models.rb'
@@ -7,6 +8,12 @@ require 'net/http'
 require 'uri'
 require "base64"
 enable :sessions
+
+Cloudinary.config do |config|
+    config.cloud_name = ENV["CLOUD_NAME"] 
+    config.api_key = ENV["CLOUDINARY_API_KEY"] 
+    config.api_secret = ENV["CLOUDINARY_API_SECRET"] 
+end
 
 # トップページ
 get '/' do
@@ -82,31 +89,31 @@ get '/signout' do
     redirect '/'
 end
 
-get '/user/:id' do
-    @user = User.find(params[:id])
-    if Participant.find_by(user_id: params[:id]).present?
-        @participants = Participant.find_by(user_id: params[:id])
-    else
-        @participants = []
-    end
-    erb :user
-end
-
 get '/user/:id/edit' do
     @user = User.find(params[:id])
-    erb :edit_user
+    erb :user_edit
 end
 
 post '/user/:id/edit' do
     @user = User.find(params[:id])
     @user.save
-    redirect '/user/:id'
+    redirect "/user/#{params[:id]}"
+end
+
+get '/user/:id' do
+    @user = User.find(params[:id])
+    @events = Participant.where(user_id: params[:id]).map{|p| p.event } || []
+    erb :user
 end
 
 # イベント関係
 get '/event' do
    @events = Event.all
    erb :event
+end
+
+get '/event/new' do
+    erb :event_create
 end
 
 get '/event/:id' do
@@ -116,25 +123,28 @@ end
 
 post '/event/new' do
     @event = Event.create(
-        name: params[:name],
+        event_name: params[:name],
         user_id: session[:user],
         detail: params[:detail],
         start_time: params[:start_time],
         end_time: params[:end_time],
-        image_url: params[:image_url]
     )
-    redirect '/event/:id'
+    if params[:file]
+        puts params[:file]
+        image_upload(params[:file])
+    end
+    redirect "/event/#{@event.id}"
 end
 
 get '/event/:id/edit' do
-    @event = Evnet.find(params[:id])
-    erb :edit_event
+    @event = Event.find(params[:id])
+    erb :event_edit
 end
 
 post '/event/:id/edit' do
     @event = Event.find(params[:id])
     @event.save
-    redirect '/event/:id'
+    redirect "/event/#{params[:id]}"
 end
 
 get '/event/:id/delete' do
@@ -143,14 +153,16 @@ get '/event/:id/delete' do
 end
 
 post '/event/:id/join' do
+    p session[:user]
+    p params[:id]
     @participant = Participant.create(
         user_id: session[:user],
         event_id: params[:id]
     )
-    redirect '/event/:id'
+    redirect "/event/#{params[:id]}"
 end
 
 post '/event/:id/cancel' do
     Participant.find_by(event_id: params[:id], user_id: session[:user]).destroy
-    redirect '/event/:id'
+    redirect "/event/#{params[:id]}"
 end

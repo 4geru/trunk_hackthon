@@ -11,20 +11,28 @@
 		<td><%= @event.event_name %></td>
 	</tr>
 	<tr>
-		<th>detail</th>
+	<th>detail</th>
 		<td><%= @event.detail %></td>
 	</tr>
-		<tr>
+	<tr>
 		<th>start_time</th>
 		<td><%= @event.start_time %></td>
 	</tr>
-		<tr>
+	<tr>
 		<th>end_time</th>
 		<td><%= @event.end_time %></td>
 	</tr>
-		<tr>
+	<tr>
 		<th>image_url</th>
 		<td><img src="<%= @event.image_url %>"></td>
+	</tr>
+	<tr>
+		<th>button</th>
+		<td>
+			<form method="post" action="/event/<%= @event.id %>/join">
+				<input type="submit" value='jastin'>
+			</form>
+		</td>
 	</tr>
 </table>
 </body>

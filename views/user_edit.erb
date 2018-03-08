@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>タイトル</title>
+</head>
+<body>
+<form method="post" action="/user/<%= @user.id %>/edit">
+    <table>
+    	<tr>
+    		<th>name</th>
+    		<td><input type="text" name='name' value="<%= @user.name %>"></td>
+    	</tr>
+    	<tr>
+    		<th>image_url</th>
+    		<td><input type="file" name='image_url' value="<%= @user.image_url %>"></td>
+    	</tr>
+    </table>
+    <input type="submit" value='jastin'>
+</form>
+</body>
+</html>

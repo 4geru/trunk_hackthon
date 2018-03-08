@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>タイトル</title>
+</head>
+<body>
+<form method="post" action="/event/new" enctype='multipart/form-data'>
+    <table>
+    	<tr>
+    		<th>name</th>
+    		<td><input type="text" name='name'></td>
+    	</tr>
+    	<tr>
+    	<th>detail</th>
+    		<td><input type="text" name='detail'></td>
+    	</tr>
+    	<tr>
+    		<th>start_time</th>
+    		<td><input type="datetime-local" name="start_time" value="2018-03-08T09:40"></td>
+    	</tr>
+    	<tr>
+    		<th>end_time</th>
+    		<td><input type="datetime-local" name="end_time" value="2018-03-09T20:40"></td>
+    	</tr>
+    	<tr>
+    		<th>image_url</th>    		
+    		<td><input type="file" name='file'></td>
+    	</tr>
+    </table>
+    <input type="submit" value='jastin'>
+</form>
+</body>
+</html>
