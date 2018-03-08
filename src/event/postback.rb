@@ -30,7 +30,7 @@ def eventPostBack(event)
     end
   when "check"    
     events = Event.find(data["event_id"])
-    user = User.where({channel_id: event["source"]["userId"]}).first
+    user = User.where({user_id: event["source"]["userId"]}).first
     if data["status"] == 'true'
       Participant.find_or_create_by({user_id: user.id, event_id: events.id })
       client.reply_message(event['replyToken'], { type: 'text', text: "「#{events.event_name}」を確定しました。" })

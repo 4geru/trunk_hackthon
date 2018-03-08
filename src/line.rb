@@ -20,13 +20,12 @@ post '/callback' do
   events = client.parse_events_from(body)
   events.each { |event|
     user = nil
-    if User.where({channel_id: event["source"]["userId"]}).first
-      user = User.find_or_create_by({channel_id: event["source"]["userId"]})
+    if User.where({user_id: event["source"]["userId"]}).first
+      user = User.find_or_create_by({user_id: event["source"]["userId"]})
     else
-      user = User.find_or_create_by({channel_id: event["source"]["userId"], status:'first'})
+      user = User.find_or_create_by({user_id: event["source"]["userId"], status:'first'})
     end
-    # user = User.find_or_create_by({channel_id: event["source"]["userId"]})
-    
+
     case event
     when Line::Bot::Event::Message
       case event.type
