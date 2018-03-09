@@ -10,7 +10,7 @@ def eventPostBack(event)
     m1 = MessageButton.new('hoge', events.image_url)
     title = events.event_name
     text = events.detail
-    m1.pushUri("詳細を見る\u{1F50E}", {"uri": "https://trunk-hackers-a4geru.c9users.io/event/#{events.id}?openExternalBrowser=1"})
+    m1.pushUri("詳細を見る\u{1F50E}", {"uri": "#{ENV["BASE_URL"]}/event/#{events.id}?openExternalBrowser=1"})
     if Participant.where({user_id: user.id, event_id: events.id }).empty?
       m1.pushButton("参加すんの\u{1F44D}", {"data": "type=join&event_id=#{events.id}"}) 
     else

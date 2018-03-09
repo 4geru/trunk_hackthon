@@ -9,7 +9,7 @@ def registerAction(event)
     n = MessageCarousel.new('webへのリンク')
     n1 = MessageButton.new('hoge')
     n1.pushButton('新しく登録するで', {"message": "data1", "data": "nil"})#[TODO] 自分の登録している一覧へ
-    n1.pushUri('登録したやつ全部見よか', {"uri": "https://trunk-hackers-a4geru.c9users.io/user/#{user.id}"})
+    n1.pushUri('登録したやつ全部見よか', {"uri": "#{ENV["BASE_URL"]}/user/#{user.id}"})
     client.reply_message(event['replyToken'], [
       sadSticky,
       n.reply([n1.getButtons('検索結果やで', "まだイベント登録がされてへんで。はよしよーや。")])
@@ -25,7 +25,7 @@ def registerAction(event)
       m1 = MessageButton.new('hoge', e.image_url)
       title = e.event_name
       text = e.detail
-      m1.pushUri("詳細見てみよか\u{1F50E}", {"uri": "https://trunk-hackers-a4geru.c9users.io/event/#{e.id}?openExternalBrowser=1"})
+      m1.pushUri("詳細見てみよか\u{1F50E}", {"uri": "#{ENV["BASE_URL"]}/event/#{e.id}?openExternalBrowser=1"})
       if Participant.where({user_id: user.id, event_id: e.id }).empty?
         m1.pushButton("参加するで\u{1F44D}", {"data": "type=join&event_id=#{e.id}"}) 
       else
@@ -36,7 +36,7 @@ def registerAction(event)
     end
     n = MessageCarousel.new('webへのリンク')
     n1 = MessageButton.new('hoge')
-    n1.pushUri('登録したやつ全部見よか', {"uri": "https://trunk-hackers-a4geru.c9users.io/user/#{user.id}"})#[TODO] 自分の登録している一覧へ
+    n1.pushUri('登録したやつ全部見よか', {"uri": "#{ENV["BASE_URL"]}/user/#{user.id}"})#[TODO] 自分の登録している一覧へ
     client.reply_message(event['replyToken'], [
         m.reply(list), # 結果リスト
         n.reply([n1.getButtons('検索結果', "#{participants.length}件のデータが登録されてるで。\n詳しいのんはwebでみれるで。")])
@@ -52,7 +52,7 @@ def registerAction(event)
       m1 = MessageButton.new('hoge', events[cnt].image_url)
       title = events[cnt].event_name
       text = events[cnt].detail
-      m1.pushUri("詳細を見る\u{1F50E}", {"uri": "https://trunk-hackers-a4geru.c9users.io/event/#{events[cnt].id}?openExternalBrowser=1"})
+      m1.pushUri("詳細を見る\u{1F50E}", {"uri": "#{ENV["BASE_URL"]}/event/#{events[cnt].id}?openExternalBrowser=1"})
       if Participant.where({user_id: user.id, event_id: events[cnt].id }).empty?
         m1.pushButton("参加するで\u{1F44D}", {"data": "type=join&event_id=#{events[cnt].id}"}) 
       else
@@ -64,7 +64,7 @@ def registerAction(event)
     p user
     n = MessageCarousel.new('webページへ')
     n1 = MessageButton.new('hoge')
-    n1.pushUri("\u{1F4D5} 登録したやつ全部見よか", {"uri": "https://trunk-hackers-a4geru.c9users.io/user/#{user.id}"})#[TODO] 自分の登録している一覧へ
+    n1.pushUri("\u{1F4D5} 登録したやつ全部見よか", {"uri": "#{ENV["BASE_URL"]}/user/#{user.id}"})#[TODO] 自分の登録している一覧へ
     client.reply_message(event['replyToken'], [
         m.reply(list), # 結果リスト
         n.reply([n1.getButtons('検索結果', "新しいのん5件表示されてるで。\n#{participants.length}件のデータが登録されてるで。\n詳しいのんはwebでみれるで。")])
