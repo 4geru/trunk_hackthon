@@ -16,4 +16,4 @@ LINE API x Webを用いた簡単なUI操作によるイベント企画サービ�
 
 ## 友達追加
 友達 id : @gwb4708m<br />
-<img src="https://qr-official.line.me/M/IPXO1xNqwe.png">
+<img src="https://raw.githubusercontent.com/4geru/trunk_hackthon/master/doc/IPXO1xNqwe.png">
