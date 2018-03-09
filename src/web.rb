@@ -81,21 +81,16 @@ get '/user' do
                         image_url: img
                     })
                 end
-                puts " list >> #{@user}"
                 session[:user] = @user.id
             end
-            puts "case 1 #{params}"
-            puts "user => #{session[:user]}"
-            redirect "/info/#{session[:user]}"
+            redirect "/user/#{session[:user]}"
             return
         else
-            puts "case 2 #{params}"
             redirect '/'
             return
         end
     else
-        puts "case 3 #{params}"
-        redirect "/info/#{session[:user]}"
+        redirect "/user/#{session[:user]}"
         return
     end
 end
@@ -105,32 +100,13 @@ get '/signout' do
     redirect '/'
 end
 
-# ゴミ
-# get '/user/:id/edit' do
-#     @user = User.find(params[:id])
-#     erb :user_edit
-# end
-
-# post '/user/:id/edit' do
-#     @user = User.find(params[:id])
-#     @user.save
-#     redirect "/user/#{params[:id]}"
-# end
-
-get '/info/:id' do
+get '/user/:id' do
     puts params
     puts session[:user]
     @user = User.find(params[:id])
     @events = @user.participants.map{|p| p.event }
     erb :mypage
 end
-
-# get '/user/:id' do
-#     puts params
-#     @user = User.find(params[:id])
-#     @events = @user.participants.map{|p| p.event } || []
-#     erb :mypage
-# end
 
 # イベント関係
 post '/search' do
@@ -147,11 +123,6 @@ end
 get '/event/new' do
     erb :event_create1
 end
-
-# 使わんぞ
-# get '/details' do
-#     erb :details
-# end
 
 get '/event/:id' do
     session[:user] = 1
@@ -175,35 +146,6 @@ post '/event/new' do
     redirect "/event/#{@event.id}"
 end
 
-# 使わんぞ
-# get '/event/:id/edit' do
-#     @event = Event.find(params[:id])
-#     erb :event_edit
-# end
-
-# 使わんぞ
-# post '/event/:id/edit' do
-#     @event = Event.find(params[:id])
-#     @event.update({
-#         event_name: params[:name] || @event.event_name,
-#         user_id: session[:user] || @event.user_id,
-#         detail: params[:detail] || @event.detail,
-#         start_time: params[:start_time] || @event.start_time,
-#         end_time: params[:end_time] || @event.end_time,
-#     })
-#     @event.save
-#     if params[:file]
-#         image_upload(params[:file], params[:id])
-#     end
-#     redirect "/event/#{params[:id]}"
-# end
-
-# 使わんぞ
-# get '/event/:id/delete' do
-#     Event.find(params[:id]).destroy
-#     redirect '/event'
-# end
-
 post '/event/:id/join' do
     p session[:user]
     p params[:id]
@@ -213,15 +155,6 @@ post '/event/:id/join' do
     )
     redirect "/event/#{params[:id]}"
 end
-
-# 使わない
-# post '/event/:id/leave' do
-#     Participant.find(
-#         user_id: session[:user],
-#         event_id: params[:id]
-#     ).delete
-#     redirect "/event/#{params[:id]}"
-# end
 
 post '/event/:id/cancel' do
     session[:user] = 1

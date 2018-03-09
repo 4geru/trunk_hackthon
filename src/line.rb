@@ -52,7 +52,7 @@ post '/callback' do
         
       end
     when Line::Bot::Event::Follow
-      client.reply_message(event['replyToken'], { type: 'text', text: "友達追加ありがとうございます！こちらのアカウントでは関西で開催されるギークなイベントをご紹介しております。プログラミングに少し興味を持ち始めた方や，これから始めようと思っている方にぜひ参加していただきたいイベントをご紹介するので，ご期待ください。" }) # TODO書く
+      client.reply_message(event['replyToken'], { type: 'text', text: "友達追加ありがとうな！このアカウントは関西で開催するなんかギークなイベントいっぱい紹介してるで。プログラミングに少し興味を持ち始めた方，これから始めようと思っている方にぜひ参加していただきたいイベントをご紹介するので，ご期待ください。" }) # TODO書く
     when Line::Bot::Event::Postback
       eventPostBack(event)
     end
