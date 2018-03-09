@@ -15,6 +15,11 @@ Cloudinary.config do |config|
     config.api_secret = ENV["CLOUDINARY_API_SECRET"] 
 end
 
+before do
+  puts "before #{session[:user]}"
+  puts "before #{params}"
+end
+
 # トップページ
 get '/' do
     if session[:user].nil?
@@ -52,37 +57,46 @@ get '/user' do
             original = Base64.urlsafe_decode64(arr[1]) 
             json = JSON.parse(original)
             
-            @user_id = json["sub"]
-            @user_name = json["name"]
-            @img = json["picture"]
+            user_id = json["sub"]
+            user_name = json["name"]
+            img = json["picture"]
             
-            if User.find_by(user_id: @user_id).nil? # ユーザーがいないとき
+            if User.find_by(user_id: user_id).nil? # ユーザーがいないとき
                 @user = User.create(
-                    user_id: @user_id,
-                    name: @user_name,
-                    image_url: @img
+                    user_id: user_id,
+                    name: user_name,
+                    image_url: img
                 )
                 if @user.persisted?
                   session[:user] = @user.id
                 else
                     redirect '/'
+                    return
                 end
             else # ユーザーがいた時
-                @user = User.find_by(user_id: @user_id)
+                @user = User.find_by(user_id: user_id)
                 if @user.name.nil?
                     @user.update({
-                        name: @user_name,
-                        image_url: @img
+                        name: user_name,
+                        image_url: img
                     })
                 end
+                puts " list >> #{@user}"
                 session[:user] = @user.id
             end
-            redirect "/user/#{session[:user]}"
+            puts "case 1 #{params}"
+            puts "user => #{session[:user]}"
+            redirect "/info/#{session[:user]}"
+            return
         else
+            puts "case 2 #{params}"
             redirect '/'
+            return
         end
     else
-        redirect "/user/#{session[:user]}"
+        puts "case 3 #{params}"
+        redirect "/info/#{session[:user]}"
+        return
     end
 end
 
@@ -91,22 +105,32 @@ get '/signout' do
     redirect '/'
 end
 
-get '/user/:id/edit' do
-    @user = User.find(params[:id])
-    erb :user_edit
-end
+# ゴミ
+# get '/user/:id/edit' do
+#     @user = User.find(params[:id])
+#     erb :user_edit
+# end
 
-post '/user/:id/edit' do
-    @user = User.find(params[:id])
-    @user.save
-    redirect "/user/#{params[:id]}"
-end
+# post '/user/:id/edit' do
+#     @user = User.find(params[:id])
+#     @user.save
+#     redirect "/user/#{params[:id]}"
+# end
 
-get '/user/:id' do
+get '/info/:id' do
+    puts params
+    puts session[:user]
     @user = User.find(params[:id])
-    @events = Participant.where(user_id: params[:id]).map{|p| p.event } || []
+    @events = @user.participants.map{|p| p.event }
     erb :mypage
 end
+
+# get '/user/:id' do
+#     puts params
+#     @user = User.find(params[:id])
+#     @events = @user.participants.map{|p| p.event } || []
+#     erb :mypage
+# end
 
 # イベント関係
 post '/search' do
@@ -130,6 +154,7 @@ end
 # end
 
 get '/event/:id' do
+    session[:user] = 1
     @event = Event.find(params[:id])
     erb :details
 end
@@ -189,15 +214,18 @@ post '/event/:id/join' do
     redirect "/event/#{params[:id]}"
 end
 
-post '/event/:id/leave' do
-    Participant.find(
-        user_id: session[:user],
-        event_id: params[:id]
-    ).delete
-    redirect "/event/#{params[:id]}"
-end
+# 使わない
+# post '/event/:id/leave' do
+#     Participant.find(
+#         user_id: session[:user],
+#         event_id: params[:id]
+#     ).delete
+#     redirect "/event/#{params[:id]}"
+# end
 
 post '/event/:id/cancel' do
-    Participant.find_by(event_id: params[:id], user_id: session[:user]).destroy
+    session[:user] = 1
+    Participant.find_by(event_id: params[:id], user_id: session[:user]).delete
+    
     redirect "/event/#{params[:id]}"
 end

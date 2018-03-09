@@ -45,7 +45,7 @@
     				<input class="btn details" type="submit" value='参加する'>
     			</form>
                 <% else %>
-                <form method="post" action="/event/<%= @event.id %>/leave">
+                <form method="post" action="/event/<%= @event.id %>/cancel">
     				<input class="btn details" type="submit" value='キャンセルする'>
     			</form>
                 <% end %>
