@@ -59,7 +59,7 @@
                 <% end %>
             <% else %>
             <div class="center">
-                <a href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1567041353&redirect_uri=#{ENV["BASE_URL"]}/user&state=12345abcde&scope=openid%20profile&nonce=09876xyz"><p class="line"></p></a>
+                <a href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1567041353&redirect_uri=<%= ENV["BASE_URL"] %>/user&state=12345abcde&scope=openid%20profile&nonce=09876xyz"><p class="line"></p></a>
             </div>
             <% end %>
         </section>
