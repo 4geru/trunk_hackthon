@@ -45,7 +45,7 @@ get '/user' do
             body = {
                 grant_type: "authorization_code",
                 code: params[:code],
-                redirect_uri: "#{ENV["BASE_URL"]}/user",
+                redirect_uri: ENV["BASE_URL"] + "/user",
                 client_id: ENV["LINE_LOGIN_CLIENT_ID"],
                 client_secret: ENV["LINE_LOGIN_SECRET"],
                 }
