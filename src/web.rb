@@ -134,7 +134,7 @@ get '/event/:id' do
 end
 
 post '/event/new' do
-    @event = Event.create(
+    Event.create(
         event_name: params[:name],
         user_id: session[:user],
         address: params[:address],
@@ -143,9 +143,9 @@ post '/event/new' do
         end_time: params[:end_time],
     )
     if params[:file]
-        
         image_upload(params[:file], Event.last.id)
     end
+    @event = Event.lasts
     redirect "/event/#{@event.id}"
 end
 
