@@ -17,7 +17,8 @@ class Event < ActiveRecord::Base
   end
   
   def join(user_id)
-    self.participants.any?{|p| p.user == user_id}
+    return false if self.participants.empty?
+    self.participants.any?{|p| p.user_id.to_i == user_id}
   end
 end
 

@@ -104,7 +104,8 @@ get '/user/:id' do
     puts params
     puts session[:user]
     @user = User.find(params[:id])
-    @events = @user.participants.map{|p| p.event }
+    @join_events = @user.participants.map{|p| p.event }
+    @events = Event.all.reverse
     erb :mypage
 end
 
@@ -125,7 +126,6 @@ get '/event/new' do
 end
 
 get '/event/:id' do
-    session[:user] = 1
     @event = Event.find(params[:id])
     erb :details
 end
@@ -148,6 +148,7 @@ end
 
 post '/event/:id/join' do
     p session[:user]
+    p "id >>>> "
     p params[:id]
     @participant = Participant.create(
         user_id: session[:user],
@@ -157,7 +158,9 @@ post '/event/:id/join' do
 end
 
 post '/event/:id/cancel' do
-    session[:user] = 1
+    puts params[:id]
+    puts session[:user]
+    puts Participant.find_by(event_id: params[:id], user_id: session[:user])
     Participant.find_by(event_id: params[:id], user_id: session[:user]).delete
     
     redirect "/event/#{params[:id]}"

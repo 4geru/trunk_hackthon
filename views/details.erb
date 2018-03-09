@@ -14,7 +14,9 @@
         <div class="logo">ロゴ
             <img src="" alt="">
         </div>
-        <a href="" class="login"><img src="" alt=""></a>
+        <% if @user.image_url %>
+        <a href="" class="login"><img src="<%= @user.image_url %>" alt=""></a>
+        <% end %>
         </div>
     </header>
     <div class="container">
@@ -41,12 +43,12 @@
             <%= session[:user] %>
             <% if session[:user] %>
                 <% if @event.join(session[:user]) %>
-                <form method="post" action="/event/<%= @event.id %>/join">
-    				<input class="btn details" type="submit" value='参加する'>
-    			</form>
-                <% else %>
                 <form method="post" action="/event/<%= @event.id %>/cancel">
     				<input class="btn details" type="submit" value='キャンセルする'>
+    			</form>
+                <% else %>
+                <form method="post" action="/event/<%= @event.id %>/join">
+    				<input class="btn details" type="submit" value='参加する'>
     			</form>
                 <% end %>
             <% end %>

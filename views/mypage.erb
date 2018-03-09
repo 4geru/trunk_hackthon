@@ -7,6 +7,9 @@
     <!--<link href="https://fonts.googleapis.com/earlyaccess/kokoro.css" rel="stylesheet" />-->
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <script type="text/javascript" src="//webfont.fontplus.jp/accessor/script/fontplus.js?a5JzW-hQzyA%3D&aa=1&ab=1&ab=1" charset="utf-8"></script>
+    <% if @user.image_url %>
+    <style> .login { background-image(<%= @user.image_url %>)} </style>
+    <% end %>
 </head>
 <body>
     <header class="header-index">
@@ -14,7 +17,9 @@
         <div class="logo">ロゴ
             <img src="" alt="">
         </div>
-        <a href="" class="login"><img src="" alt=""></a>
+        <% if @user.image_url %>
+        <a href=""><p class="login"></p></a>
+        <% end %>
         </div>
     </header>
     <div class="container">
@@ -23,73 +28,47 @@
             <div class="plan">
             <h2>参加予定のハッカソン</h2>
             </div>
-            <article class="contents">
-                <div class="date">
-                    <p class="month">３月</p>
-                    <div class="border"></div>
-                    <p class="day">２４</p>
-                </div>
-                <img class="contents-thumbnail" src="../img.png" alt="" width="90px">
-                <div class="contents-headline">
-                <h3>なんとかかんとかハッカソン</h3>
-                <p class="contents-text">ああああああああああああああああああ</p>
-                </div>
-            </article>
-            <article class="contents">
-                <div class="date">
-                    <p class="month">３月</p>
-                    <div class="border"></div>
-                    <p class="day">２４</p>
-                </div>
-                <img class="contents-thumbnail" src="../img.png" alt="" width="90px">
-                <div class="contents-headline">
-                <h3>なんとかかんとかハッカソン</h3>
-                <p class="contents-text">ああああああああああああああああああ</p>
-                </div>
-            </article>
+            <% if @join_events != [] %>
+                <% @join_events.each do |event| %>
+                    <article class="contents">
+                        <div class="date">
+                            <p class="month"><%= event.start_time.to_s.slice(5,2).to_i %>月</p>
+                            <div class="border"></div>
+                            <p class="day"><%= event.start_time.to_s.slice(8,2).to_i %></p>
+                        </div>
+                        <img class="contents-thumbnail" src="<%= event.image_url %>" alt="" width="90px">
+                        <div class="contents-headline">
+                        <h3><%= event.event_name %></h3>
+                        <p class="contents-text"><%= event.detail %></p>
+                        </div>
+                    </article>
+                <% end %>
+            <% else %>
+                <article class="contents">
+                    <h3>現在参加予定のイベントはありません</h3>
+                </article>
+            <% end %>
             <div class="search mypage">
             <h2>ハッカソンをさがす</h2>
-            <form action="" method="post" class="form">
+            <form action="/search" method="post" class="form">
               <input type="text" name="keyword" value="" placeholder="キーワード">
               <button type="submit" class="submit">
             </form>
-           </div>
-            <article class="contents">
-                <div class="date">
-                    <p class="month">３月</p>
-                    <div class="border"></div>
-                    <p class="day">２４</p>
-                </div>
-                <img class="contents-thumbnail" src="../img.png" alt="" width="90px">
-                <div class="contents-headline">
-                <h3>なんとかかんとかハッカソン</h3>
-                <p class="contents-text">ああああああああああああああああああ</p>
-                </div>
-            </article>
-            <article class="contents">
-                <div class="date">
-                    <p class="month">３月</p>
-                    <div class="border"></div>
-                    <p class="day">２４</p>
-                </div>
-                <img class="contents-thumbnail" src="../img.png" alt="" width="90px">
-                <div class="contents-headline">
-                <h3>なんとかかんとかハッカソン</h3>
-                <p class="contents-text">ああああああああああああああああああ</p>
-                </div>
-            </article>
-            <article class="contents">
-                <div class="date">
-                    <p class="month">３月</p>
-                    <div class="border"></div>
-                    <p class="day">２４</p>
-                </div>
-                <img class="contents-thumbnail" src="../img.png" alt="" width="90px">
-                <div class="contents-headline">
-                <h3>なんとかかんとかハッカソン</h3>
-                <p class="contents-text">ああああああああああああああああああ</p>
-                </div>
-            </article>
+            </div>
+            <% @events.each do |event| %>
+                <article class="contents">
+                    <div class="date">
+                        <p class="month"><%= event.start_time.to_s.slice(5,2).to_i %>月</p>
+                        <div class="border"></div>
+                        <p class="day"><%= event.start_time.to_s.slice(8,2).to_i %></p>
+                    </div>
+                    <img class="contents-thumbnail" src="<%= event.image_url %>" alt="" width="90px">
+                    <div class="contents-headline">
+                    <h3><%= event.event_name %></h3>
+                    <p class="contents-text"><%= event.detail %></p>
+                    </div>
+                </article>
+            <% end %>
         </section>
     </div>
 </body>

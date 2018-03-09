@@ -2,7 +2,7 @@ def searchAction(event)
   len = [(Event.all.length / 3).to_i, 5].min
   events = Event.all.shuffle.take(len * 3)
   list = []
-  m  = MessageCarousel.new('イベント選択中')
+  m  = MessageCarousel.new('イベント選択してるで')
   
   cnt = 0
   for i in 0...len

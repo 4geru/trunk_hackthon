@@ -36,14 +36,14 @@ post '/callback' do
       when Line::Bot::Event::MessageType::Text
         if event.message['text'] =~ /探す/ or event.message['text'] == 'イベントを探す'
           searchAction(event)
-        elsif event.message['text'] == '登録一覧へ'
+        elsif event.message['text'] == '登録一覧みたい'
           registerAction(event)
         else
-          message = {
-            type: 'text',
-            text: event.message['text']
-          }
-          client.reply_message(event['replyToken'], message)
+          # message = {
+          #   type: 'text',
+          #   text: event.message['text']
+          # }
+          # client.reply_message(event['replyToken'], message)
         end
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
@@ -52,7 +52,7 @@ post '/callback' do
         
       end
     when Line::Bot::Event::Follow
-      client.reply_message(event['replyToken'], { type: 'text', text: "友達追加ありがとうな！このアカウントは関西で開催するなんかギークなイベントいっぱい紹介してるで。プログラミングに少し興味を持ち始めた方，これから始めようと思っている方にぜひ参加していただきたいイベントをご紹介するので，ご期待ください。" }) # TODO書く
+      client.reply_message(event['replyToken'], { type: 'text', text: "友達追加ありがとうな！このアカウントは関西で開催するなんかギークなイベントいっぱい紹介してるで。プログラミングに興味を持ち始めたにいちゃんらとか，これからやろて思ているねえちゃんらにめっちゃ参加してほしいイベント紹介するから，楽しみにしててな。" }) # TODO書く
     when Line::Bot::Event::Postback
       eventPostBack(event)
     end
