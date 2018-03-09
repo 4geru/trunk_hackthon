@@ -9,7 +9,6 @@ body{
 .header-index{
     height: 250px;
     width: 100%;
-    background-image: url(wysiwyg_71e591219408a729b2e0.jpg);
     border-bottom: 4px solid #000;
     margin-bottom: 25px;
 }
@@ -17,14 +16,17 @@ body{
 .logo{
     height: 40px;
     width: 100px;
-    background: #fff;
+    margin:10px;
 }
 
-.login{
-    height: 40px;
-    width: 100px;
-    background-color: #fff;
+.before_login {
+    width: 100%;
+    height: 65px;
+    background:#fff ;
+    display: flex;
+    justify-content: space-between;
 }
+
 
 h1{
     text-align: center;
@@ -190,6 +192,7 @@ h3{
     border-bottom: 3px solid #e9eaea;
     text-align: center;
     font-size: 18px;
+    word-wrap: break-word;
 }
 
 .details-main-text{
@@ -206,6 +209,7 @@ h3{
 .detail-con{
     display: flex;
     align-items: flex-start;
+    text-align: left;
 }
 
 .detail-icon{
@@ -249,4 +253,37 @@ h3{
 
 .create{
     margin-top: 30px;
+}
+
+
+.login {
+  height: 33px;
+  width: 115px;
+  margin-right:  -1.5px;
+  background-image: url(./btn_login_base.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.line {
+  height: 33px;
+  width: 115px;
+  /*margin-right:  -1.5px;*/
+  background-image: url(../btn_login_base.png);
+  background-size: contain;
+  margin: auto;
+  background-repeat: no-repeat;
+}
+
+footer{
+    height: 50px;
+    width: 100%;
+    background-size:100%;
+    border-bottom: 4px solid #000;
+    text-align: center;
+    padding-top: 10px;
+}
+
+footer img{
+    width: 30%;
 }

@@ -184,3 +184,16 @@ h3{
     line-height: 0em;
     word-wrap: break-word;
 }
+
+footer{
+    height: 50px;
+    width: 100%;
+    background-size:100%;
+    border-bottom: 4px solid #000;
+    text-align: center;
+    padding-top: 10px;
+}
+
+footer img{
+    width: 30%;
+}

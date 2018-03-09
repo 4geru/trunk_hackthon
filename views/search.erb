@@ -9,21 +9,24 @@
     <script type="text/javascript" src="//webfont.fontplus.jp/accessor/script/fontplus.js?a5JzW-hQzyA%3D&aa=1&ab=1&ab=1" charset="utf-8"></script>
 </head>
 <body>
-  <header class="header-index">
-      <div class="before_login">
-      <div class="logo">ロゴ
-          <img src="" alt="">
+  <header class="header-index" id="top">
+       <div class="before_login">
+        <div class="logo">
+            <a href="<%= session[:user] ? "/user/#{session[:user]}" : "/" %>">
+                <img src="../oideya_logo.png" height="35">
+            </a>
+        </div>
+        
+      <% if @user %>
+          <div class="login"></div>
+        <% end %>
       </div>
-      <% if @user.image_url %>
-        <a href="" class="login"><img src="<%= @user.image_url %>" alt=""></a>
-      <% end %>
-      </div>
-  </header>
+  </header id="top">
     <div class="container">
-        <section class="title">####の検索結果######件</section>
+        <section class="title">「<%= @words.join(" ") %>」の検索結果<%= @events.length %>件</section>
         <section class="main">
             <div class="search">
-            <form action="/search" method="post" class="form">
+            <form action="/search" method="get" class="form">
               <input type="text" name="keyword" value="" placeholder="キーワード">
               <button type="submit" class="submit">
             </form>
@@ -46,5 +49,22 @@
                 <% end %>
         </section>
     </div>
+    <footer>
+        <a href="#top"><img src="../Top.png" alt=""></a>
+        <p></p>
+    </footer>
+    <% if @user %>
+      <style> 
+      .login {
+          height: 35px;
+          width: 35px;
+          border-radius: 50px;
+          margin-right: 11.5px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-image: url("<%= @user.image_url %>");
+       }
+      </style>
+    <% end %>
 </body>
 </html>

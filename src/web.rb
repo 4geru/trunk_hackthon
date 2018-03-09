@@ -46,8 +46,8 @@ get '/user' do
                 grant_type: "authorization_code",
                 code: params[:code],
                 redirect_uri: "https://trunk-hackers-a4geru.c9users.io/user",
-                client_id: "1567041353",
-                client_secret: "e8226db48fdb1bfd15dbed97384701a1",
+                client_id: ENV["LINE_LOGIN_CLIENT_ID"],
+                client_secret: ENV["LINE_LOGIN_SECRET"],
                 }
             res = Net::HTTP.post_form(uri, body)
             parsed_json = JSON.parse(res.body)
@@ -105,20 +105,22 @@ get '/user/:id' do
     puts session[:user]
     @user = User.find(params[:id])
     @join_events = @user.participants.map{|p| p.event }
-    @events = Event.all.reverse
+    @events = Event.all.reverse[0..3]
     erb :mypage
 end
 
 # イベント関係
-post '/search' do
-    p params[:keyword]
+get '/search' do
     if params[:keyword].present?
-        words = params[:keyword].split(' ')
-        @events = words.map{|w| Event.where("event_name like ?", "%#{w}%")}.flatten
+        @words = params[:keyword].split(' ')
+        @events = @words.map{|w| Event.where("event_name like ?", "%#{w}%")}.flatten
     else
         @events = Event.all
-    end 
-   erb :search
+        @words = 'keywordはありません'
+    end
+    
+    @user = session[:user] ? User.find("#{session[:user]}") : nil
+    erb :search
 end
 
 get '/event/new' do
@@ -127,6 +129,7 @@ end
 
 get '/event/:id' do
     @event = Event.find(params[:id])
+    @user = User.find(session[:user]) if session[:user]
     erb :details
 end
 
@@ -148,7 +151,6 @@ end
 
 post '/event/:id/join' do
     p session[:user]
-    p "id >>>> "
     p params[:id]
     @participant = Participant.create(
         user_id: session[:user],
@@ -164,4 +166,9 @@ post '/event/:id/cancel' do
     Participant.find_by(event_id: params[:id], user_id: session[:user]).delete
     
     redirect "/event/#{params[:id]}"
+end
+
+get '/event/:id/delete' do
+    Event.find(params[:id]).destroy
+    redirect '/'
 end

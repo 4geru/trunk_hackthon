@@ -21,16 +21,6 @@ body{
 .logo{
     height: 40px;
     width: 100px;
-    background: #fff;
-}
-
-.login {
-  height: 35px;
-  width: 35px;
-  border-radius: 50px;
-  margin-right: 11.5px;
-  background-size: contain;
-  background-repeat: no-repeat;
 }
 
 h1{
@@ -42,12 +32,12 @@ h1{
 
 .btn{
     width: 250px;
-    height: 35px;
+    height: 30px;
     background-color: #e72d2f;
     border-radius: 10px;
     text-align: center;
-    margin: 0 auto;
-    padding-top: 10px;
+    margin: 20px auto;
+    padding-top: 15px;
     color: #fff;
 }
 
@@ -126,6 +116,7 @@ input{
     width: 95%;
     height: 100px;
     margin: 0 auto;
+    color:#000;
     border-bottom: 1px solid #474342;
 }
 
@@ -206,4 +197,21 @@ h3{
     width: 100%;
     height: 500px;
     z-index: 100;
+}
+
+a {
+    text-decoration: none;
+}
+
+footer{
+    height: 50px;
+    width: 100%;
+    background-size:100%;
+    border-bottom: 4px solid #000;
+    text-align: center;
+    padding-top: 10px;
+}
+
+footer img{
+    width: 30%;
 }

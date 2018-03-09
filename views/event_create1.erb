@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="../event_create.css">
-    <link href="https://fonts.googleapis.com/earlyaccess/kokoro.css" rel="stylesheet" />
+    <script type="text/javascript" src="//webfont.fontplus.jp/accessor/script/fontplus.js?a5JzW-hQzyA%3D&aa=1&ab=1&ab=1" charset="utf-8"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 </head>
 <body>
     <div class="container">
-       <section class="title">ハッカソンを開催する</section>
+        <div class="logo">
+            <a href="<%= session[:user] ? "/user/#{session[:user]}" : "/" %>">
+                <img src="../oideya_logo.png" height="35">
+            </a>
+        </div>
+        <section class="title">ハッカソンを開催する</section>
         <section class="main hold">
         <form action="/event/new" method="post"  enctype='multipart/form-data'>
             <div class="form">

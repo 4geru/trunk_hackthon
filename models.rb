@@ -8,6 +8,12 @@ end
 class Event < ActiveRecord::Base
   has_many :participants
   belongs_to :user
+  validates :event_name, presence: true
+  validates :start_time, presence: true
+  validates :detail, presence: true
+  validates :end_time, presence: true
+  validates :user_id, presence: true
+  
   def photo
     if self.image_url =~ /cloudinary/
       self.image_url.split('/').map{|i| i =~ /upload/ ? "upload/w_600" : i}.join('/')
